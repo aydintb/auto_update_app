@@ -1,8 +1,8 @@
 [package]
 name = "auto_update_app"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
-rust_auto_updater = "1.0.0"
-
+self_update = "0.39"
+tokio = { version = "1", features = ["full"] }

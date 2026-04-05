@@ -1,0 +1,47 @@
+cargo new auto_update_app
+git init
+git remote add origin git@github.com:aydintb/auto_update_app.git
+git push origin master
+
+
+------------------------
+
+cargo build --release
+
+output:
+target/release/auto_update_app
+
+
+4. GitHub Release (CRITICAL)
+
+Go to your repo on GitHub
+
+Create a release:
+
+Tag:
+v0.1.1
+
+
+git tag v0.1.1
+git push origin v0.1.1
+
+
+Upload asset:
+
+Rename your binary to match target:
+
+auto_update_app-x86_64-unknown-linux-gnu
+
+
+5. File naming rule (important)
+
+self_update expects:
+
+{bin_name}-{target}
+
+auto_update_app-x86_64-unknown-linux-gnu
+auto_update_app-x86_64-pc-windows-msvc.exe
+
+
+
+
