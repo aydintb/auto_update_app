@@ -75,11 +75,13 @@ pub fn run_update(config: &UpdaterConfig) -> Result<UpdateResult, Box<dyn std::e
 fn restart_process(exe: &std::path::Path) {
     #[cfg(unix)]
     {
-        let _ = std::process::Command::new(exe).exec();
+        let err = std::process::Command::new(exe).exec();
+        eprintln!("Failed to exec new process: {}", err);
+        std::process::exit(1);
     }
     #[cfg(windows)]
     {
-        let _ = std::process::Command::new(exe).spawn();
+        std::process::Command::new(exe).spawn().expect("failed to spawn update process");
         std::process::exit(0);
     }
 }
