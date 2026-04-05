@@ -7,6 +7,8 @@ fn hello_world() {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Current version: {}", cargo_crate_version!());
 
+    let exe_path = std::env::current_exe()?; // capture before update (Linux marks replaced binary as deleted)
+
     // --- updater ---
     let status = self_update::backends::github::Update::configure()
         .repo_owner("aydintb")                 // your GitHub username
@@ -23,8 +25,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("Updated to version: {}", status.version());
 
         // restart after update
-        let exe = std::env::current_exe()?;
-        std::process::Command::new(exe).spawn()?;
+        std::process::Command::new(&exe_path).spawn()?;
         std::process::exit(0);
     } else {
         println!("Already up to date.");
