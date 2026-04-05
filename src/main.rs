@@ -15,8 +15,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     run_update(&config)?;
 
-    hello_world();
-
     println!("App running...");
+
+    hello_world();
     Ok(())
 }
