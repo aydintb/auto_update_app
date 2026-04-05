@@ -5,9 +5,6 @@ on:
     tags:
       - "v*"
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,13 +29,13 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Build
-        run: cargo build --release
+        run: cargo build --release --target ${{ matrix.target }}
 
       - name: Prepare binary
         shell: bash
         run: |
-          mkdir dist
-          cp target/release/${{ matrix.bin }} dist/auto_update_app-${{ matrix.target }}
+          mkdir -p dist
+          cp target/${{ matrix.target }}/release/${{ matrix.bin }} dist/auto_update_app-${{ matrix.target }}
 
       - name: Generate checksum
         shell: bash
@@ -50,7 +47,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*
-        env:
-          # Use a PAT if GITHUB_TOKEN fails
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
           
