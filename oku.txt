@@ -1,3 +1,10 @@
+cargo build --release
+
+git tag v0.1.1
+git push origin v0.1.1
+
+-------------------------
+
 cargo new auto_update_app
 git init
 git remote add origin git@github.com:aydintb/auto_update_app.git
@@ -12,36 +19,70 @@ output:
 target/release/auto_update_app
 
 
-4. GitHub Release (CRITICAL)
 
-Go to your repo on GitHub
-
-Create a release:
-
-Tag:
-v0.1.1
+git add .github/workflows/release.yml
+git commit -m "Add release pipeline"
+git push
 
 
 git tag v0.1.1
 git push origin v0.1.1
 
 
-Upload asset:
 
-Rename your binary to match target:
+nano .github/workflows/release.yml
 
-auto_update_app-x86_64-unknown-linux-gnu
+name: Build & Release
 
+on:
+  push:
+    tags:
+      - "v*"
 
-5. File naming rule (important)
+jobs:
+  build:
+    name: Build and Upload Release
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            bin: auto_update_app
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            bin: auto_update_app.exe
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            bin: auto_update_app
 
-self_update expects:
+    runs-on: ${{ matrix.os }}
 
-{bin_name}-{target}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-auto_update_app-x86_64-unknown-linux-gnu
-auto_update_app-x86_64-pc-windows-msvc.exe
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
 
+      - name: Build
+        run: cargo build --release
 
+      - name: Prepare binary
+        shell: bash
+        run: |
+          mkdir dist
+          cp target/release/${{ matrix.bin }} dist/auto_update_app-${{ matrix.target }}
 
+      - name: Generate checksum
+        shell: bash
+        run: |
+          cd dist
+          sha256sum * > checksums.txt
 
+      - name: Upload Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
