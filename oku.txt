@@ -3,6 +3,11 @@ compile edilip (windows, macos, linux) versiyonlari olusturuluyor.
 github kendisi compile ediyor.
 
 -------
+Cargo.toml
+version = "0.7.0"
+# cargo tomp icinde version no ile tag ayni olmali, yoksa fail eder.
+
+-------
 
 cargo build --release
 
@@ -12,9 +17,5 @@ git push origin v0.1.0
 # runtime'i bir yere kopyala.. ki kendini compile edildiginde bozulmasin, 
 # kendini calisinca update edebilsin.
 
-# make some changes
-cargo build --release
 
-git tag v0.1.1
-git push origin v0.1.1
 
