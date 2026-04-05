@@ -1,7 +1,13 @@
 use self_update::cargo_crate_version;
 
+fn hello_world() {
+    println!("Hello, world!");
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Current version: {}", cargo_crate_version!());
+
+    hello_world();
 
     // --- updater ---
     let status = self_update::backends::github::Update::configure()
