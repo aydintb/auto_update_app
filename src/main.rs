@@ -1,5 +1,8 @@
 use self_update::cargo_crate_version;
 
+#[cfg(unix)]
+use std::os::unix::process::CommandExt;
+
 fn hello_world() {
     println!("Hello, world!");
 }
@@ -24,9 +27,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if status.updated() {
         println!("Updated to version: {}", status.version());
 
-        // restart after update
-        std::process::Command::new(&exe_path).spawn()?;
-        std::process::exit(0);
+        // restart after update using exec (replaces current process, no stdio race)
+        #[cfg(unix)]
+        std::process::Command::new(&exe_path).exec();
+        #[cfg(windows)]
+        {
+            std::process::Command::new(&exe_path).spawn()?;
+            std::process::exit(0);
+        }
     } else {
         println!("Already up to date.");
     }
