@@ -4,5 +4,5 @@ version = "0.6.0"
 edition = "2021"
 
 [dependencies]
-self_update = "0.39"
+self_updater_helper = { path = "self_updater_helper" }
 tokio = { version = "1", features = ["full"] }
