@@ -1,3 +1,9 @@
+source code tamamen github'da; push ettigin andan itibaren otomatik olarak
+compile edilip (windows, macos, linux) versiyonlari olusturuluyor.
+github kendisi compile ediyor.
+
+-------
+
 cargo build --release
 
 git tag v0.1.0
