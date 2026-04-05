@@ -7,8 +7,6 @@ fn hello_world() {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Current version: {}", cargo_crate_version!());
 
-    hello_world();
-
     // --- updater ---
     let status = self_update::backends::github::Update::configure()
         .repo_owner("aydintb")                 // your GitHub username
@@ -31,6 +29,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         println!("Already up to date.");
     }
+
+    hello_world();
 
     // --- your app logic ---
     println!("App running...");
